@@ -1,6 +1,5 @@
 #include "../io/io.h"
 #include "fb.h"
-#include "font.h"
 /* I/O ports */
 #define FB_COMMAND_PORT         0x3D4
 #define FB_DATA_PORT            0x3D5
@@ -40,13 +39,4 @@ void fb_clearscreen_graphics(){
 void fb_writepixel(int x, int y, unsigned char color){
     unsigned char* vga = (unsigned char*)0xA0000;
     vga[(320*y)+x] = color;
-}
-//DOESN'T WORK!!!!!!!!
-void fb_writechar_bitmap(int num, int x, int y){
-    unsigned char* vga = (unsigned char*)0xA0000;
-    for(int a = 0; a < 13; a++){
-        for(int b = 0; b < 8; b++){
-            vga[(320*(y+a))+(x+b)] = ((letters[num][a]) >> b) & 0x01;
-        }
-    }
 }
