@@ -42,4 +42,5 @@ isr_common:
 isrzero:
     cli
     push 0x00
+    push 0x00
     jmp isr_common
