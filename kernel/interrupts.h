@@ -4,3 +4,5 @@ struct registers{
     unsigned int int_no, err_code;
     unsigned int eip, cs, eflags, useresp, ss;
 };
+
+void isrzero();

@@ -21,7 +21,6 @@ isr_common:
     sti
     iret
 
-
 %macro isr_noerrorcode 1
     global isr%1
     isr%1:

@@ -12,12 +12,14 @@ char* logo = "      :::::::::  :::    :::               ::::::::   :::::::: \n\
    +#++:++#+  +#++:++   +#++:++#++:++ +#+    +:+ +#++:++#++   \n\
   +#+    +#+ +#+  +#+                +#+    +#+        +#+    \n\
  #+#    #+# #+#   #+#               #+#    #+# #+#    #+#     \n\
-#########  ###    ###               ########   ########       \n";
+#########  ###    ###               ########   ########       \n\n";
 
 void kmain(){
     console_clear();
     console_write(logo);
     console_write("[ OK ] GDT initialized by bootloader\n");
     idt_install();
-    console_write("[ OK ] IDT loaded\n");
+    while(1 == 1){
+
+    }
 }

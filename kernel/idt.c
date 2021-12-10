@@ -1,5 +1,7 @@
 #include "idt.h"
 #include "interrupts.h"
+#include "../io/io.h"
+#include "../console/console.h"
 
 struct idt_entry idt[256];
 struct idt_ptr idt_pointer;
@@ -19,5 +21,10 @@ void idt_install(){
         //Fix interrupts!
         idt_create_entry(i, (int)isrzero, 0x08, 0x8E);
     }
+    io_portwrite(0x21, 0xFD);
+    asm("sti");
+    idt_create_entry(9, (int)isrzero, 0x08, 0x8E);
+    console_write("[ OK ] Keyboard IRQ 0x09 created\n");
     idt_load(idt_pointer);
+    console_write("[ OK ] IDT loaded\n");
 }
