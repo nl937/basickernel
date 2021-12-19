@@ -3,23 +3,19 @@
 #include "../console/console.h"
 #include "../io/io.h"
 #include "../io/serial.h"
-#include "interrupts.h"
 #include "idt.h"
-
-char* logo = "      :::::::::  :::    :::               ::::::::   :::::::: \n\
-     :+:    :+: :+:   :+:               :+:    :+: :+:    :+: \n\
-    +:+    +:+ +:+  +:+                +:+    +:+ +:+         \n\
-   +#++:++#+  +#++:++   +#++:++#++:++ +#+    +:+ +#++:++#++   \n\
-  +#+    +#+ +#+  +#+                +#+    +#+        +#+    \n\
- #+#    #+# #+#   #+#               #+#    #+# #+#    #+#     \n\
-#########  ###    ###               ########   ########       \n\n";
 
 void kmain(){
     console_clear();
-    console_write(logo);
-    console_write("[ OK ] GDT initialized by bootloader\n");
-    idt_install();
-    while(1 == 1){
-
-    }
+    console_setcolor(0x0F);
+    console_write("####     ####                              \n\
+#  #     #  #              ######   #######\n\
+#  ####  #  ####  ####### ##    ##  #     #\n\
+      ## #  #  #  #     # #  ##  # #  #####\n\
+#  ##  # #    ##  ####### #  ##  # ##    ##\n\
+#  ##  # #  #  ##         #  ##  # #####  #\n\
+#     ## #  ##  #         ##    ## #     ##\n\
+ # ####  ########          ######  ####### \n\n");
+    idt_load();
+    asm("int $0x04");
 }

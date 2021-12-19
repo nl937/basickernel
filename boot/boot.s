@@ -1,6 +1,7 @@
 section .init
 [bits 16]
 global init
+global CODE_SEGMENT
 init:
     ;VGA text mode
     ;mov ah, 0x00
@@ -13,7 +14,7 @@ init:
     ;Read disk
     mov [disk], dl
     mov ah, 0x2
-    mov al, 5
+    mov al, 20
     mov ch, 0
     mov dh, 0
     mov cl, 2

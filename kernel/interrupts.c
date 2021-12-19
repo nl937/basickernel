@@ -1,13 +1,10 @@
-#include "interrupts.h"
-#include "../io/io.h"
 #include "../console/console.h"
-
-void isr_handler(){
-    io_portwrite(0x21, 0x20);
-    console_write("Interrupt occured!\n");
-}
-
-void exception_handler(){
-    console_write("Exception occured, panic!");
-    asm("hlt");
+#include "interrupts.h"
+void interrupt_handler(registers_t regstatus){
+    if(regstatus.int_no < 32){
+        console_setcolor(0x40);
+        console_write("Exception occured!\n");
+        console_write("Kernel panic!\n");
+        asm("hlt");
+    }
 }

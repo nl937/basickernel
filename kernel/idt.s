@@ -1,6 +1,6 @@
-global idt_load
-extern idt_pointer
+global idt_final
 
-idt_load:
-    lidt [idt_pointer]
+idt_final:
+    mov eax, [esp+4]
+    lidt [eax]
     ret

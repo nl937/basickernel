@@ -4,9 +4,15 @@ char console_cursor_x = 0;
 
 char console_cursor_y = 0;
 
+unsigned char console_color = 0x0F;
+
 void console_init(){
     fb_clearscreen_text();
     fb_movecursor(0);
+}
+
+void console_setcolor(unsigned char color){
+    console_color = color;
 }
 
 void console_clear(){
@@ -32,7 +38,6 @@ void console_scroll(){
 
 void console_writechar(char c){
     short* vga = (short*)0xB8000;
-    unsigned char color = 0x0F;
     if(c == '\n'){
         console_cursor_x = 0;
         console_cursor_y++;
@@ -42,7 +47,7 @@ void console_writechar(char c){
         console_cursor_y++;
     }
     else{
-        vga[(console_cursor_y * 80) + console_cursor_x] = (color << 8) | c;
+        vga[(console_cursor_y * 80) + console_cursor_x] = (console_color << 8) | c;
         console_cursor_x++;
     }
     console_scroll();

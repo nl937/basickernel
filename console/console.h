@@ -5,3 +5,5 @@ void console_write(char* c);
 void console_clear();
 
 void console_scroll();
+
+void console_setcolor();
