@@ -14,7 +14,7 @@ init:
     ;Read disk
     mov [disk], dl
     mov ah, 0x2
-    mov al, 20
+    mov al, 40
     mov ch, 0
     mov dh, 0
     mov cl, 2

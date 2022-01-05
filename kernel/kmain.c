@@ -1,8 +1,8 @@
 #include "../drv/fb.h"
-#include "../drv/keyboard.h"
 #include "../console/console.h"
 #include "../io/io.h"
 #include "../io/serial.h"
+#include "interrupts.h"
 #include "idt.h"
 
 void kmain(){
@@ -16,6 +16,10 @@ void kmain(){
 #  ##  # #  #  ##         #  ##  # #####  #\n\
 #     ## #  ##  #         ##    ## #     ##\n\
  # ####  ########          ######  ####### \n\n");
+    console_writestatus(1, "GDT initalized by bootloader");
     idt_load();
-    asm("int $0x04");
+    interrupt_pic_init();
+    while(1==1){
+
+    }
 }

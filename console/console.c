@@ -22,6 +22,12 @@ void console_clear(){
     fb_movecursor(0);
 }
 
+void console_backspace(){
+    short* vga = (short*)0xB8000;
+    console_cursor_x = console_cursor_x - 1;
+    vga[(80*console_cursor_y) + console_cursor_x] = 0x00;
+}
+
 void console_scroll(){
     short* vga = (short*)0xB8000;
     short blank = 0x0F20;
@@ -59,4 +65,18 @@ void console_write(char* c){
     while(c[i]){
         console_writechar(c[i++]);
     }
+}
+
+void console_writestatus(char status, char* message){
+    if(status == 0){
+        console_setcolor(0x04);
+        console_write("[ FAIL ] ");
+    }
+    if(status == 1){
+        console_setcolor(0x0A);
+        console_write("[ OK ] ");
+    }
+    console_setcolor(0x0F);
+    console_write(message);
+    console_writechar('\n');
 }

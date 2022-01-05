@@ -30,6 +30,8 @@ extern void isr28();
 extern void isr29();
 extern void isr30();
 extern void isr31();
+extern void isr32();
+extern void isr33();
 
 typedef struct registers
 {
@@ -40,3 +42,5 @@ typedef struct registers
 } registers_t;
 
 void interrupt_handler(registers_t regstatus);
+
+void interrupt_pic_init();

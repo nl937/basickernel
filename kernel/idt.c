@@ -48,7 +48,9 @@ void idt_load(){
     idt_create_entry(29, (unsigned int)isr29, 0x08, 0x8E);
     idt_create_entry(30, (unsigned int)isr30, 0x08, 0x8E);
     idt_create_entry(31, (unsigned int)isr31, 0x08, 0x8E);
+    idt_create_entry(32, (unsigned int)isr32, 0x08, 0x8E);
+    idt_create_entry(33, (unsigned int)isr33, 0x08, 0x8E);
     asm("sti");
     idt_final((unsigned int)&idt_pointer);
-    console_write("[ OK ] IDT loaded\n");
+    console_writestatus(1, "IDT loaded");
 }
