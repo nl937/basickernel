@@ -4,6 +4,7 @@
 #include "../io/serial.h"
 #include "interrupts.h"
 #include "idt.h"
+#include "gdt.h"
 
 void kmain(){
     console_clear();
@@ -16,7 +17,7 @@ void kmain(){
 #  ##  # #  #  ##         #  ##  # #####  #\n\
 #     ## #  ##  #         ##    ## #     ##\n\
  # ####  ########          ######  ####### \n\n");
-    console_writestatus(1, "GDT initalized by bootloader");
+    gdt_load();
     idt_load();
     interrupt_pic_init();
     while(1==1){

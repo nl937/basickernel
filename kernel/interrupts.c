@@ -23,19 +23,22 @@ void interrupt_handler(registers_t regstatus){
             if(keycode == 0x0E){
                 console_backspace();
             }
+            //Shift key doesn't work :(
+            /*
             else if((keycode == 0x2A) | (keycode == 0x36)){
                 shift = 1;
             }
             else if((keycode == 0xAA) | (keycode == 0xB6)){
                 shift = 0;
-            }
-            else{
+            }*/
+            else{/*
                 if(shift == 1){
                     console_writechar(keyboard_keymap_shift[keycode]);
                 }
                 else{
                     console_writechar(keyboard_keymap[keycode]);
-                }
+                }*/
+                console_writechar(keyboard_keymap[keycode]);
             }
         }
     }
