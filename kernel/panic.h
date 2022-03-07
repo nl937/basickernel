@@ -1,0 +1,1 @@
+void panic(registers_t panicregisters);

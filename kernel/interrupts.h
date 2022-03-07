@@ -44,3 +44,4 @@ typedef struct registers
 void interrupt_handler(registers_t regstatus);
 
 void interrupt_pic_init();
+

@@ -23,5 +23,5 @@ void gdt_load(){
     gdt_pointer.size = 39;
     gdt_pointer.offset = (unsigned int)&gdt_table;
     gdt_final((unsigned int)&gdt_pointer);
-    console_writestatus(1, "GDT Initialized");
+    console_writestatus(1, "GDT initialized");
 }

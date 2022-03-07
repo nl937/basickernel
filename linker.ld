@@ -1,10 +1,10 @@
 ENTRY(init)
-OUTPUT_FORMAT("binary")
-SECTIONS {
-    . = 0x7c00;
+SECTIONS{
+    . = 1M;
+    KERNEL_BEGIN = .;
     .text :
     {
-        *(.init)
+        *(.multiboot)
         *(.text)
     }
     .rodata :
@@ -19,4 +19,6 @@ SECTIONS {
     {
         *(.bss)
     }
+    KERNEL_END = .;
+	KERNEL_SIZE = KERNEL_END - KERNEL_BEGIN;
 }

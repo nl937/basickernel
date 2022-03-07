@@ -22,10 +22,10 @@ void fb_clearscreen_text(){
 }
 
 void fb_movecursor(unsigned short position){
-    io_portwrite(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
-    io_portwrite(FB_DATA_PORT, ((position >> 8) & 0x00FF));
-    io_portwrite(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
-    io_portwrite(FB_DATA_PORT, position & 0x00FF);
+    io_portwrite_b(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
+    io_portwrite_b(FB_DATA_PORT, ((position >> 8) & 0x00FF));
+    io_portwrite_b(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
+    io_portwrite_b(FB_DATA_PORT, position & 0x00FF);
 }
 
 //VGA graphics mode

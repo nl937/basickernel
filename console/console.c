@@ -6,6 +6,8 @@ char console_cursor_y = 0;
 
 unsigned char console_color = 0x0F;
 
+char console_buffer[256];
+
 void console_init(){
     fb_clearscreen_text();
     fb_movecursor(0);
@@ -79,4 +81,39 @@ void console_writestatus(char status, char* message){
     console_setcolor(0x0F);
     console_write(message);
     console_writechar('\n');
+}
+
+void console_buffer_append(char c){
+    int i;
+    for(i = 0; i < 256; i++){
+        if(console_buffer[i] == '\0'){
+            break;
+        }
+        else{
+            continue;
+        }
+    }
+    console_buffer[i] = c;
+    console_buffer[i+1] = '\0';
+}
+
+char* console_buffer_fetch(){
+    return console_buffer;
+}
+
+void console_buffer_clear(){
+    console_buffer[0] = '\0';
+}
+
+void console_buffer_pop(){
+    int i;
+    for(i = 0; i < 256; i++){
+        if(console_buffer[i] == '\0'){
+            break;
+        }
+        else{
+            continue;
+        }
+    }
+    console_buffer[i-1] = '\0';
 }
