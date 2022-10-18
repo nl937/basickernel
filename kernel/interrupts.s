@@ -1,4 +1,3 @@
-global isr0
 extern interrupt_handler
 
 %macro ISR_NOERRCODE 1
@@ -54,21 +53,21 @@ ISR_NOERRCODE 32
 ISR_NOERRCODE 33
 
 isr_common:
-    pusha
-    mov ax, ds
-    push eax
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    call interrupt_handler
-    pop eax
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    popa
-    add esp, 8
-    sti
-    iret
+  pusha
+  mov ax, ds
+  push eax
+  mov ax, 0x10
+  mov ds, ax
+  mov es, ax
+  mov fs, ax
+  mov gs, ax
+  call interrupt_handler
+  pop eax
+  mov ds, ax
+  mov es, ax
+  mov fs, ax
+  mov gs, ax
+  popa
+  add esp, 8
+  sti
+  iret

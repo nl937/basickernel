@@ -29,6 +29,6 @@ int serial_transfer_fifo_empty(unsigned short com){
     return io_portread_b(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
 }
 
-void serial_write(unsigned short com, char* data){
-    io_portwrite_b(com, data[0]);
+void serial_write(unsigned short com, char data){
+    io_portwrite_b(com, data);
 }

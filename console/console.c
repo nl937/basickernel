@@ -1,15 +1,23 @@
 #include "../drv/fb.h"
+#include "../boot/multiboot.h"
+#include "../io/io.h"
+#include "../io/serial.h"
 
-char console_cursor_x = 0;
+#define CONSOLE_WIDTH 80
+#define CONSOLE_HEIGHT 25
 
-char console_cursor_y = 0;
+int console_cursor_x = 0;
+
+int console_cursor_y = 0;
 
 unsigned char console_color = 0x0F;
 
 char console_buffer[256];
 
+short console_textbuffer[CONSOLE_WIDTH * CONSOLE_HEIGHT];
+
 void console_init(){
-    fb_clearscreen_text();
+    //fb_clearscreen_text();
     fb_movecursor(0);
 }
 
@@ -17,49 +25,66 @@ void console_setcolor(unsigned char color){
     console_color = color;
 }
 
+void console_flush(int type){
+    if(type == 0){
+        short* vga = (short*)0xB8000;
+        vga[(CONSOLE_WIDTH * console_cursor_y) + console_cursor_x - 1] = console_textbuffer[(CONSOLE_WIDTH * console_cursor_y) + console_cursor_x - 1];
+    }
+    else if(type == 1){
+        short* vga = (short*)0xB8000;
+        for(int i = 0; i < CONSOLE_WIDTH * CONSOLE_HEIGHT; i++){
+            vga[i] = console_textbuffer[i];
+        }
+    }
+}
+
 void console_clear(){
-    fb_clearscreen_text();
     console_cursor_x = 0;
     console_cursor_y = 0;
-    fb_movecursor(0);
+    for(int i = 0; i < CONSOLE_WIDTH * CONSOLE_HEIGHT; i++){
+        console_textbuffer[i] = 0x0000;
+    }
+    console_flush(1);
 }
 
 void console_backspace(){
-    short* vga = (short*)0xB8000;
     console_cursor_x = console_cursor_x - 1;
-    vga[(80*console_cursor_y) + console_cursor_x] = 0x00;
+    console_textbuffer[(CONSOLE_WIDTH*console_cursor_y) + console_cursor_x] = 0x0000;
+    console_flush(0);
 }
 
 void console_scroll(){
-    short* vga = (short*)0xB8000;
-    short blank = 0x0F20;
-    if(console_cursor_y >= 25){
-        for(int i = 0; i < 1920; i++){
-            vga[i] = vga[i+80];
+    if(console_cursor_y >= CONSOLE_HEIGHT){
+        for(int i = 0; i < (CONSOLE_WIDTH * CONSOLE_HEIGHT); i++){
+            console_textbuffer[i] = console_textbuffer[i+CONSOLE_WIDTH];
         }
-        for(int i = 1920; i < 2000; i++){
-            vga[i] = blank;
+        for(int i = (CONSOLE_WIDTH * CONSOLE_HEIGHT); i < (CONSOLE_WIDTH * CONSOLE_HEIGHT) + CONSOLE_WIDTH; i++){
+            console_textbuffer[i] = 0x0000;
         }
-        console_cursor_y = 24;
+        console_cursor_y = CONSOLE_HEIGHT - 1;
+        console_flush(1);
+    }
+    else{
+        console_flush(0);
     }
 }
 
 void console_writechar(char c){
-    short* vga = (short*)0xB8000;
     if(c == '\n'){
         console_cursor_x = 0;
         console_cursor_y++;
     }
-    else if (console_cursor_x >= 80){
+    else if (console_cursor_x >= CONSOLE_WIDTH){
         console_cursor_x = 0;
         console_cursor_y++;
+        console_textbuffer[(console_cursor_y * CONSOLE_WIDTH) + console_cursor_x] = (console_color << 8) | c;
+        console_cursor_x++;
     }
-    else{
-        vga[(console_cursor_y * 80) + console_cursor_x] = (console_color << 8) | c;
+    else if(c != '\n'){
+        console_textbuffer[(console_cursor_y * CONSOLE_WIDTH) + console_cursor_x] = (console_color << 8) | c;
         console_cursor_x++;
     }
     console_scroll();
-    fb_movecursor((console_cursor_y * 80) + console_cursor_x);
 }
 
 void console_write(char* c){
@@ -74,7 +99,7 @@ void console_writestatus(char status, char* message){
         console_setcolor(0x04);
         console_write("[ FAIL ] ");
     }
-    if(status == 1){
+    else if(status == 1){
         console_setcolor(0x0A);
         console_write("[ OK ] ");
     }

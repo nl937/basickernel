@@ -27,6 +27,7 @@ void interrupt_handler(registers_t regstatus){
             }
         }
     }
+    io_portwrite_b(0xA0, 0x20);
     io_portwrite_b(0x20, 0x20);
     return;
 }
@@ -44,5 +45,6 @@ void interrupt_pic_init(){
     io_portwrite_b(0xA1, 0x01);
     io_portwrite_b(0x21, mask1);
     io_portwrite_b(0xA1, mask2);
+    asm("sti");
     console_writestatus(1, "Master and Slave PICs reconfigured and masked");
 }

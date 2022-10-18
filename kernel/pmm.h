@@ -10,9 +10,9 @@ int pmm_map_test(unsigned long bit);
 
 int pmm_first_free();
 
-void pmm_init_region(unsigned long* addr, unsigned long size);
+void pmm_init_region(unsigned long addr, unsigned long size);
 
-void pmm_deinit_region(unsigned long* addr, unsigned long size);
+void pmm_deinit_region(unsigned long addr, unsigned long size);
 
 void* pmm_allocate_page();
 

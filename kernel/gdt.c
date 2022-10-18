@@ -16,12 +16,12 @@ static void gdt_create_entry(unsigned short num, unsigned int base, unsigned int
 
 void gdt_load(){
     gdt_create_entry(0, 0, 0, 0, 0);
-    gdt_create_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
-    gdt_create_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
-    gdt_create_entry(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
-    gdt_create_entry(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
+    gdt_create_entry(1, 0, 0xFFFFF, 0x9A, 0xCF);
+    gdt_create_entry(2, 0, 0xFFFFF, 0x92, 0xCF);
+    gdt_create_entry(3, 0, 0xFFFFF, 0xFA, 0xCF);
+    gdt_create_entry(4, 0, 0xFFFFF, 0xF2, 0xCF);
     gdt_pointer.size = 39;
     gdt_pointer.offset = (unsigned int)&gdt_table;
     gdt_final((unsigned int)&gdt_pointer);
-    console_writestatus(1, "GDT initialized");
+    console_writestatus(1, "GDT loaded");
 }

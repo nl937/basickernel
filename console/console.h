@@ -1,3 +1,5 @@
+#include "../boot/multiboot.h"
+
 void console_writechar(char c);
 
 void console_write(char* c);
@@ -19,5 +21,9 @@ char* console_buffer_fetch();
 void console_buffer_clear();
 
 void console_buffer_pop();
+
+void console_flush(int type);
+
+void console_init(multiboot_info_t* mbd);
 
 extern char console_cursor_x;

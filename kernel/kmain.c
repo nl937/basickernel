@@ -27,11 +27,11 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
     console_setcolor(0x0F);
     printf("Booting kernel\n");
     gdt_load();
-    pmm_init(mbd);
     idt_load();
     interrupt_pic_init();
     timer_init();
-    //ata_init();
+    pmm_init(mbd);
+    ata_init();
     printf("kshell > ");
     while(1==1){
         if(console_cursor_x == 0){
@@ -43,11 +43,20 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
                 console_clear();
             }
             else if(strcmp(buffer, "panic\n") == 0){
-                sleep(1000);
                 asm("int $0x3");
             }
             else if(strcmp(buffer, "memtest\n") == 0){
                 printf("Allocate test: %08x\n", pmm_allocate_page());
+            }
+            else if(strcmp(buffer, "readtest\n") == 0){
+                unsigned int *test = pmm_allocate_page();
+                printf("Allocated 0x%08x\n", test);
+                printf("Sector test\n");
+                ata_read_sectors(test, 1, 1);
+                for(int i = 0; i < 256; i++){
+                    printf("%02x ", test[i] & 0x00FF);
+                    printf("%02x ", test[i] >> 8);
+                }
             }
             else{
                 printf("command not found\n");

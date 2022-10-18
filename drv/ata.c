@@ -1,38 +1,46 @@
 #include "../io/io.h"
 #include "ata.h"
 #include "../console/console.h"
+#include "../stdlib/stdio.h"
 
 static void ata_wait_bsy();
-//static void ata_wait_drq();
+static void ata_wait_drq();
 
-void ata_init(){
-    ata_wait_bsy();
-    //Detect drives
-    io_portwrite_b(0x1F6, 0xA0);
-    io_portwrite_w(0x1F2, 0x0000);
-    io_portwrite_w(0x1F3, 0x0000);
-    io_portwrite_w(0x1F4, 0x0000);
-    io_portwrite_w(0x1F5, 0x0000);
-    io_portwrite_b(0x1F7, 0xEC);
-    if(io_portread_b(0x1F7) == 0x00){
-        console_writestatus(0, "ATA PIO: No drives found");
+int ata_init(){
+    if(io_portread_b(0x1F7) == 0xFF){
+        console_writestatus(0, "ATA-PIO: No drives found");
+        return 1;
     }
     else{
-
+        return 0;
     }
 }
-/*
-void* ata_read_sectors(unsigned int lba, unsigned short sectors, unsigned int* target){
-    return 0;
+
+void ata_read_sectors(unsigned int target_address, unsigned int LBA, unsigned char sectors){
+    printf("0x%08x\n", target_address);
+    io_portwrite_b(0x1F6, 0xE0 | ((LBA >> 24) & 0x0F));
+    io_portwrite_b(0x1F1, 0x00);
+    io_portwrite_b(0x1F2, sectors);
+    io_portwrite_b(0x1F3, LBA);
+    io_portwrite_b(0x1F4, (LBA >> 8));
+    io_portwrite_b(0x1F5, (LBA >> 16));
+    io_portwrite_b(0x1F7, 0x20);
+    ata_wait_bsy();
+    ata_wait_drq();
+    unsigned int* data = (unsigned int*)target_address;
+    for(int s = 0; s < sectors; s++){
+        ata_wait_bsy();
+        ata_wait_drq();
+        for(int a = 0; a < 256; a++){
+            data[(s * 256) + a] = io_portread_w(0x1F0);
+        }
+    }
 }
 
-void ata_write_sectors(unsigned int lba, unsigned short secors, unsigned int* origin){
-}
-*/
 static void ata_wait_bsy(){
-    while(io_portread_b(0x1F7) != 0){}
+    while(io_portread_b(0x1F7) & 0x80);
 }
 
-/*static void ata_wait_drq(){
-    while(io_portread_b(0x1F7) != 1){}
-}*/
+static void ata_wait_drq(){
+    while(!(io_portread_b(0x1F7) & 0x40));
+}
