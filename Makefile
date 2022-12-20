@@ -1,5 +1,5 @@
 CC = i686-elf-gcc
-CFLAGS = -ffreestanding -Wall -Wextra -nostdlib
+CFLAGS = -ffreestanding -Wall -Wextra -nostdlib -m32
 LDFLAGS = -T linker.ld
 AS = nasm
 ASFLAGS = -f elf32

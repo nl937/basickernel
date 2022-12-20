@@ -21,13 +21,13 @@ void ata_read_sectors(unsigned int target_address, unsigned int LBA, unsigned ch
     io_portwrite_b(0x1F6, 0xE0 | ((LBA >> 24) & 0x0F));
     io_portwrite_b(0x1F1, 0x00);
     io_portwrite_b(0x1F2, sectors);
-    io_portwrite_b(0x1F3, LBA);
-    io_portwrite_b(0x1F4, (LBA >> 8));
-    io_portwrite_b(0x1F5, (LBA >> 16));
+    io_portwrite_b(0x1F3, (unsigned char)LBA);
+    io_portwrite_b(0x1F4, (unsigned char)(LBA >> 8));
+    io_portwrite_b(0x1F5, (unsigned char)(LBA >> 16));
     io_portwrite_b(0x1F7, 0x20);
     ata_wait_bsy();
     ata_wait_drq();
-    unsigned int* data = (unsigned int*)target_address;
+    unsigned int* data = target_address;
     for(int s = 0; s < sectors; s++){
         ata_wait_bsy();
         ata_wait_drq();

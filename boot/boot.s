@@ -35,7 +35,7 @@ align 16
 section .text
 global init
 init:
-    mov esp, 0x3D0900
+    mov esp, 0x1000000
     push eax
     push ebx
     extern kmain
